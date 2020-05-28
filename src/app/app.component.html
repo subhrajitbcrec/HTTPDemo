@@ -1,1 +1,8 @@
-Title is <b>{{title}}</b>
+Hello - {{title}}
+<br><br><br>
+
+<label>Enter Name</label>
+<input #name><br>
+<p>
+    <button (click)="submitName(name.value)">Submit Name</button>
+</p>
