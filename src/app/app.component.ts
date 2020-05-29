@@ -14,33 +14,43 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    //Make ServiceCall -> update Title -> then display the title
-    const headersVal = { userID: "Subhrajit" };
-    this.http.get<any>('http://localhost:8080/greet', { headers: headersVal }).subscribe(data => {
+    /* This next line is just to demo we can change the req/resp type from JSON to XML,
+    Even though we will be able to make a successful Call to the API (we can check in the Networks tab)
+    We will see a proper response being sent by the API but we need to make changes to use the XML in our angular code
+    As by default Angular will treat the response as JSON. We can uncomment this line of code & comment the next Headers
+    declaration to test the changes. */
+
+    // const headerValues = {userID: 'subhrajit', Accept: 'application/xml', 'Content-Type': 'application/xml'};
+
+    const headerValues = { userID: 'subhrajit', Accept: 'application/json', 'Content-Type': 'application/json' };
+
+    this.http.get<any>('http://localhost:8080/greet', { headers: headerValues }).subscribe(data => {
       console.log(data);
       this.title = data.content;
     });
+    // Making 2 calls example
+    // this.makePostCall(0, "Perry");
   }
 
 
-  submitName(nameVal) {
-    console.log(nameVal);
-    const body = new Greet(2, nameVal);
-    let resp = null;
-    var status = "running";
+  validateName(name: any) {
+    console.log('Inside Validate Name: ', name);
+    this.makePostCall(2, name);
+  }
+
+  makePostCall(id: number, name: any) {
+    const body = new Greet(id, name);
+    let resp;
     this.http.post('http://localhost:8080/addGreeting', body).subscribe({
       next: data => {
-        console.log("Success", data);
-        status = "success";
+        console.log('Success : ', data);
         resp = data;
         this.title = resp.content;
       },
-      error: error => {
-        console.error('There was an error!', error);
-        status = "failed";
-        this.title ='There was an error!';
+      error: err => {
+        console.error('There was an error: ', err);
+        this.title = 'How could you!!';
       }
-    })
-
+    });
   }
 }

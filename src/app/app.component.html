@@ -1,8 +1,8 @@
-Hello - {{title}}
+{{title}}
 <br><br><br>
 
 <label>Enter Name</label>
 <input #name><br>
 <p>
-    <button (click)="submitName(name.value)">Submit Name</button>
+    <button (click) = "validateName(name.value)">Submit Name</button>
 </p>
